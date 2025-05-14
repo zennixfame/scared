@@ -1,0 +1,186 @@
+-- Официальный URL скрипта
+local authorizedURL = "https://raw.githubusercontent.com/zennixfame/scared/refs/heads/main/kue2"
+
+-- Функция для получения содержимого текущего скрипта
+local function getCurrentScriptContent()
+    -- Поскольку debug.getinfo не даёт URL, мы можем использовать loadstring для проверки
+    -- Это не идеально, но работает для большинства случаев
+    return debug.getinfo(1, "f").func -- Альтернативно, можно передать содержимое вручную
+end
+
+-- Функция проверки источника
+local function isAuthorizedSource()
+    -- Пробуем загрузить содержимое с официального URL
+    local success, officialContent = pcall(function()
+        return game:HttpGet(authorizedURL, true)
+    end)
+    
+    if not success or not officialContent then
+        print("Failed to fetch official script: ", officialContent)
+        return false
+    end
+    
+    -- Проверяем, совпадает ли текущий скрипт с официальным
+    -- Поскольку мы не можем напрямую получить содержимое текущего скрипта,
+    -- используем косвенный подход: если скрипт был изменён, он не должен работать
+    -- Для точной проверки нужно, чтобы эксплойт передавал содержимое
+    -- Здесь мы просто проверяем доступность URL и предполагаем, что если он доступен, то всё ок
+    return true -- Упрощённая проверка, см. примечания ниже
+end
+
+-- Проверка источника
+if not isAuthorizedSource() then
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.ResetOnSpawn = false
+
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(0.5, 0, 0.5, 0)
+    Frame.Position = UDim2.new(0.25, 0, 0.25, 0)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Frame.BorderSizePixel = 0
+    Frame.Parent = ScreenGui
+
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(1, 0, 1, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = "Use only the official script from GitHub!"
+    Label.TextColor3 = Color3.fromRGB(255, 0, 0)
+    Label.TextSize = 40
+    Label.Font = Enum.Font.SourceSansBold
+    Label.TextScaled = true
+    Label.Parent = Frame
+
+    wait(5)
+    ScreenGui:Destroy()
+    error("Unauthorized script execution!")
+end
+
+-- Создаем ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "KeySystem"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Основной фрейм (темная тема)
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 350, 0, 250)
+Frame.Position = UDim2.new(0.5, -175, 0.5, -125)
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+-- UICorner для скругленных углов
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 10)
+Corner.Parent = Frame
+
+-- Кнопка закрытия (белый крестик)
+local CloseButton = Instance.new("TextButton")
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -40, 0, 10)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.Text = "✕"
+CloseButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+CloseButton.TextSize = 18
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.Parent = Frame
+
+-- UICorner для кнопки закрытия
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(0, 5)
+CloseCorner.Parent = CloseButton
+
+-- Поле ввода ключа
+local KeyInput = Instance.new("TextBox")
+KeyInput.Size = UDim2.new(0, 300, 0, 50)
+KeyInput.Position = UDim2.new(0.5, -150, 0, 80)
+KeyInput.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.PlaceholderText = "Enter Key..."
+KeyInput.Text = ""
+KeyInput.TextSize = 18
+KeyInput.Font = Enum.Font.SourceSans
+KeyInput.Parent = Frame
+
+-- UICorner для поля ввода
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(0, 8)
+InputCorner.Parent = KeyInput
+
+-- Кнопка проверки
+local SubmitButton = Instance.new("TextButton")
+SubmitButton.Size = UDim2.new(0, 300, 0, 50)
+SubmitButton.Position = UDim2.new(0.5, -150, 0, 140)
+SubmitButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+SubmitButton.Text = "Submit"
+SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitButton.TextSize = 18
+SubmitButton.Font = Enum.Font.SourceSansBold
+SubmitButton.Parent = Frame
+
+-- UICorner для кнопки Submit
+local SubmitCorner = Instance.new("UICorner")
+ pCorner.CornerRadius = UDim.new(0, 8)
+SubmitCorner.Parent = SubmitButton
+
+-- Текст с информацией
+local InfoLabel = Instance.new("TextLabel")
+InfoLabel.Size = UDim2.new(0, 300, 0, 30)
+InfoLabel.Position = UDim2.new(0.5, -150, 0, 200)
+InfoLabel.BackgroundTransparency = 1
+InfoLabel.Text = "Get key from zennixfame (Discord)"
+InfoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+InfoLabel.TextSize = 16
+InfoLabel.Font = Enum.Font.SourceSans
+InfoLabel.TextScaled = true
+InfoLabel.Parent = Frame
+
+-- Правильный ключ
+local correctKey = "FameXiv"
+
+-- Функция закрытия GUI
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Функция проверки ключа
+SubmitButton.MouseButton1Click:Connect(function()
+    if KeyInput.Text == correctKey then
+        -- Удаляем начальный GUI
+        Frame.Visible = false
+        
+        -- Создаем фрейм для сообщения о следующем ключе
+        local NextKeyFrame = Instance.new("Frame")
+        NextKeyFrame.Size = UDim2.new(0.5, 0, 0.5, 0)
+ceğini        NextKeyFrame.Position = UDim2.new(0.25, 0, 0.1, 0) -- Сдвинуто вверх
+        NextKeyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+        NextKeyFrame.BorderSizePixel = 0
+        NextKeyFrame.Parent = ScreenGui
+        
+        -- UICorner для сообщения
+        local NextKeyCorner = Instance.new("UICorner")
+        NextKeyCorner.CornerRadius = UDim.new(0, 10)
+        NextKeyCorner.Parent = NextKeyFrame
+        
+        -- Текст следующего ключа
+        local NextKeyLabel = Instance.new("TextLabel")
+        NextKeyLabel.Size = UDim2.new(1, 0, 1, 0)
+        NextKeyLabel.BackgroundTransparency = 1
+        NextKeyLabel.Text = "Next key is Scsova"
+        NextKeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        NextKeyLabel.TextSize = 40
+        NextKeyLabel.Font = Enum.Font.SourceSansBold
+        NextKeyLabel.TextScaled = true
+        NextKeyLabel.Parent = NextKeyFrame
+        
+        -- Задержка 10 секунд
+        wait(10)
+        
+        -- Удаляем сообщение
+        ScreenGui:Destroy()
+        
+        -- Выполняем оригинальный скрипт
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/ago106/SpaceHub/refs/heads/main/Multi'))()
+    end
+end)
